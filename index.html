@@ -9,16 +9,17 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #e2e8f0;
+            padding: 2rem;
         }
-        .container {
+        .page {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .hero {
             text-align: center;
-            padding: 3rem 2rem;
-            max-width: 600px;
+            padding: 3rem 0 2rem;
         }
         .status {
             display: inline-block;
@@ -28,27 +29,38 @@
             border-radius: 9999px;
             font-size: 0.875rem;
             font-weight: 600;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
         h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: #f8fafc;
         }
-        p {
+        .subtitle {
             font-size: 1.125rem;
             line-height: 1.7;
             color: #94a3b8;
-            margin-bottom: 1.5rem;
         }
-        .info {
+        .card {
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 0.75rem;
             padding: 1.5rem;
-            margin-top: 2rem;
-            text-align: left;
+            margin-top: 1.5rem;
+        }
+        .card-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
         .info-row {
             display: flex;
@@ -59,14 +71,65 @@
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #64748b; }
         .info-value { color: #e2e8f0; font-weight: 500; }
+        .checks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1rem;
+            background: #0f172a;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #065f46;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            color: #6ee7b7;
+        }
+        .timer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: #38bdf8;
+        }
+        .timer-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 400;
+            margin-top: 0.25rem;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: #475569;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="status">Deployed</div>
-        <h1>MFGtest</h1>
-        <p>Tato stránka byla úspěšně nasazena přes Coolify. Vše funguje správně.</p>
-        <div class="info">
+    <div class="page">
+        <div class="hero">
+            <div class="status">Deployed</div>
+            <h1>MFGtest</h1>
+            <p class="subtitle">Tato stránka byla úspěšně nasazena přes Coolify. Vše funguje správně.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Informace o nasazení</div>
             <div class="info-row">
                 <span class="info-label">Server</span>
                 <span class="info-value">Nginx Alpine</span>
@@ -84,6 +147,52 @@
                 <span class="info-value">__SECRET_MESSAGE__</span>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-title">Zdravotní kontroly</div>
+            <div class="checks">
+                <div class="check">
+                    <div class="check-icon">&#10003;</div>
+                    <span>HTML</span>
+                </div>
+                <div class="check">
+                    <div class="check-icon">&#10003;</div>
+                    <span>CSS</span>
+                </div>
+                <div class="check">
+                    <div class="check-icon">&#10003;</div>
+                    <span>Nginx</span>
+                </div>
+                <div class="check">
+                    <div class="check-icon">&#10003;</div>
+                    <span>Env vars</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Uptime</div>
+            <div class="timer">
+                <span id="uptime">00:00:00</span>
+                <div class="timer-label">od načtení stránky</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            MFGtest &middot; Coolify deployment demo
+        </div>
     </div>
+
+    <script>
+        const start = Date.now();
+        function updateUptime() {
+            const s = Math.floor((Date.now() - start) / 1000);
+            const h = String(Math.floor(s / 3600)).padStart(2, '0');
+            const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+            const sec = String(s % 60).padStart(2, '0');
+            document.getElementById('uptime').textContent = h + ':' + m + ':' + sec;
+        }
+        setInterval(updateUptime, 1000);
+    </script>
 </body>
 </html>
